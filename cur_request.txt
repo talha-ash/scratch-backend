@@ -1,0 +1,47 @@
+######Create Recipe
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjUzNzI3NTI0LCJpYXQiOjE2NTEzMDgzMjQsImlzcyI6InNjcmF0Y2giLCJqdGkiOiIwMWM2MGFhMy1iZmZlLTQwNjgtOWMwNy1mZWZmYmEzNjkzYWUiLCJuYmYiOjE2NTEzMDgzMjMsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.yXPajNCPc1eCZEhCx_VPwEfvwwlmNZ-Za1q2qRPeinMb7tIl0f_pGTBEuZB6qAk8R6y9y7TaAz9uqdX8POHCZg' \
+-F query="mutation { createRecipe(cookingSteps: [{step: 1, description: \"oh ya\",videoTitle: \"oh ya\", video: \"wave\"}],ingredients:[{description: \"Hell Cell\", image: \"nft\"}] ,recipeImages: [{image: \"users_csv\"}], name: \"Hell in Cell\",serveTime:20, nutritionFacts: [\"hello\", \"cell\"] ) {id, name}}" \
+-F users_csv=@nft.jpg \
+-F metadata_json=@nft.jpg \
+-F wave=@wave.png \
+-F nft=@nft.jpg \
+-F jump=@jump.jpeg \
+localhost:4000/api/v1
+
+######Update Recipe Ingredients
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjQ1ODgzOTg3LCJpYXQiOjE2NDM0NjQ3ODcsImlzcyI6InNjcmF0Y2giLCJqdGkiOiI5MjU4NDc0OS1hNWJlLTRmNzktYWFiNC1hYTQ0MmY5YTcxMWIiLCJuYmYiOjE2NDM0NjQ3ODYsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.4NWhIADSoG2W1ENEuW8K_WHjyt2vrtcHAaf2QmdCKO7Ml5czvmRZrD4w0xuPbPd0atR8S4P3fkg-c-kcTpL2pA' \
+-F query="mutation { updateRecipeIngredients(id: 15, ingredients:[{description: \"Hell Kell\", image: \"wave\", id: 3}]) {ingredients{description, imageUrl}}}" \
+-F wave=@wave.png \
+-F nft=@nft.jpg \
+-F jump=@jump.jpeg \
+localhost:4000/api/v1
+
+#if id not exist it will enter as new record scenario
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjQ1ODgzOTg3LCJpYXQiOjE2NDM0NjQ3ODcsImlzcyI6InNjcmF0Y2giLCJqdGkiOiI5MjU4NDc0OS1hNWJlLTRmNzktYWFiNC1hYTQ0MmY5YTcxMWIiLCJuYmYiOjE2NDM0NjQ3ODYsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.4NWhIADSoG2W1ENEuW8K_WHjyt2vrtcHAaf2QmdCKO7Ml5czvmRZrD4w0xuPbPd0atR8S4P3fkg-c-kcTpL2pA' \
+-F query="mutation { updateRecipeIngredients(id: 15, ingredients:[{description: \"Hell Kell\", image: \"wave\", id: 3},{description: \"Nice World\", image: \"wave\", id: 4}]) {ingredients{description, imageUrl}}}" \
+-F wave=@wave.png \
+-F nft=@nft.jpg \
+-F jump=@jump.jpeg \
+localhost:4000/api/v1
+
+######Update Recipe Images
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjQ1ODgzOTg3LCJpYXQiOjE2NDM0NjQ3ODcsImlzcyI6InNjcmF0Y2giLCJqdGkiOiI5MjU4NDc0OS1hNWJlLTRmNzktYWFiNC1hYTQ0MmY5YTcxMWIiLCJuYmYiOjE2NDM0NjQ3ODYsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.4NWhIADSoG2W1ENEuW8K_WHjyt2vrtcHAaf2QmdCKO7Ml5czvmRZrD4w0xuPbPd0atR8S4P3fkg-c-kcTpL2pA' \
+-F query="mutation { updateRecipeImages(id: 15, recipeImages:[{image: \"wave\", id: 3}]) {recipeImages{imageUrl}}}" \
+-F wave=@wave.png \
+-F nft=@nft.jpg \
+-F jump=@jump.jpeg \
+localhost:4000/api/v1
+
+
+######Update Recipe cookingSteps
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjQ1ODgzOTg3LCJpYXQiOjE2NDM0NjQ3ODcsImlzcyI6InNjcmF0Y2giLCJqdGkiOiI5MjU4NDc0OS1hNWJlLTRmNzktYWFiNC1hYTQ0MmY5YTcxMWIiLCJuYmYiOjE2NDM0NjQ3ODYsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.4NWhIADSoG2W1ENEuW8K_WHjyt2vrtcHAaf2QmdCKO7Ml5czvmRZrD4w0xuPbPd0atR8S4P3fkg-c-kcTpL2pA' \
+-F query="mutation { updateRecipeCookingSteps(id: 15, cookingSteps:[{step: 1, description: \"oh ya\", videoTitle: \"oh ya\", video: \"wave\"}]) {cookingSteps{step, description, videoUrl, videoTitle}}}" \
+-F wave=@wave.png \
+-F nft=@nft.jpg \
+-F jump=@jump.jpeg \
+localhost:4000/api/v1
