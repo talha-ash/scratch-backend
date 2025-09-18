@@ -34,14 +34,14 @@ defmodule ScratchAppWeb.AuthorizationMiddleware do
   end
 
   defp has_rights_access(current_user, is_admin_right) do
-    roles = current_user.roles
+    role = current_user.role
 
     case is_admin_right do
       true ->
-        Enum.member?(roles, "admin")
+        role == "admin"
 
       false ->
-        Enum.member?(roles, "user")
+        role == "client"
     end
   end
 

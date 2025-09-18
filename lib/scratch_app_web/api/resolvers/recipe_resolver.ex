@@ -66,11 +66,11 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
     args = Map.put(args, :user_id, current_user.id)
 
     with nil <- Recipes.get_like_recipe(args),
-         {:ok, %Recipes.Like{} = _recipe} <-
+         {:ok, %Recipes.RecipeLike{} = _recipe} <-
            Recipes.like_recipe(args) do
       {:ok, %{message: "like successfully"}}
     else
-      %Recipes.Like{} = recipe_like ->
+      %Recipes.RecipeLike{} = recipe_like ->
         Recipes.unlike_recipe(recipe_like)
         {:ok, %{message: "unlike successfully"}}
 
@@ -79,10 +79,34 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
     end
   end
 
+  def create_ingredient(_parent, args, %{context: %{current_user: current_user}}) do
+    args = Map.put(args, :user_id, current_user.id)
+
+    with {:ok, %Recipes.Ingredient{} = ingredient} <-
+           Recipes.create_ingredient(args) do
+      {:ok, ingredient}
+    else
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  def create_tag(_parent, args, %{context: %{current_user: current_user}}) do
+    args = Map.put(args, :user_id, current_user.id)
+
+    with {:ok, %Recipes.Tag{} = tag} <-
+           Recipes.create_tag(args) do
+      {:ok, tag}
+    else
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
   def create_category(_parent, args, %{context: %{current_user: current_user}}) do
     args = Map.put(args, :user_id, current_user.id)
 
-    with {:ok, %Recipes.Category{} = category} <-
+    with {:ok, %Recipes.RecipeCategory{} = category} <-
            Recipes.create_category(args) do
       {:ok, category}
     else
@@ -107,5 +131,9 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
     _args = Map.put(args, :user_id, current_user.id)
 
     {:ok, Recipes.get_categories(current_user.id)}
+  end
+
+  def get_categories(_parent, _args, _context) do
+    {:ok, Recipes.get_ingredients()}
   end
 end

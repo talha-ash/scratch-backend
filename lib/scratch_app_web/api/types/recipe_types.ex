@@ -1,5 +1,6 @@
 defmodule ScratchAppWeb.Types.RecipeType do
   use Absinthe.Schema.Notation
+
   alias ScratchAppWeb.Resolvers.{Recipe, Helpers}
   import_types(Absinthe.Plug.Types)
 
@@ -51,6 +52,20 @@ defmodule ScratchAppWeb.Types.RecipeType do
     field :like_recipe, :like_recipe_success do
       arg(:recipe_id, non_null(:id))
       resolve(&Recipe.like_recipe/3)
+    end
+
+    @desc "Create Ingredient"
+    field :create_ingredient, :create_ingredient_success do
+      arg(:name, non_null(:string))
+      arg(:description, non_null(:string))
+      arg(:image_url, :upload)
+      resolve(&Recipe.create_ingredient/3)
+    end
+
+    @desc "Create Tag"
+    field :create_tag, :create_tag_success do
+      arg(:name, non_null(:string))
+      resolve(&Recipe.create_tag/3)
     end
 
     @desc "Create Category"
@@ -133,6 +148,23 @@ defmodule ScratchAppWeb.Types.RecipeType do
     field :title, :string
   end
 
+  @desc "Create Ingredient Successfull"
+  object :create_ingredient_success do
+    field :id, :integer
+    field :name, :string
+    field :description, :string
+
+    field :image_url, :string do
+      resolve(&Helpers.resolve_images/3)
+    end
+  end
+
+  @desc "Create Tag Successfull"
+  object :create_tag_success do
+    field :id, :integer
+    field :name, :string
+  end
+
   @desc "Save Recipe By Category Successfull"
   object :save_recipe_success do
     field :id, :integer
@@ -147,6 +179,7 @@ defmodule ScratchAppWeb.Types.RecipeType do
   # end
 
   object :ingredient do
+    field :name, :string
     field :description, :string
 
     field :image_url, :string do

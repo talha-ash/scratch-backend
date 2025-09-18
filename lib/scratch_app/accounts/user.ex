@@ -9,7 +9,7 @@ defmodule ScratchApp.Accounts.User do
     field :password, :string
     field :fullname, :string
     field :username, :string
-    field :roles, {:array, :string}, default: ["user"]
+    field :role, :string
     field :password_one, :string, virtual: true
     field :password_two, :string, virtual: true
     field :refresh_token, :string, load_in_query: true

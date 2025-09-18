@@ -8,7 +8,7 @@ defmodule ScratchApp.Repo.Migrations.AddTableUsers do
       add(:fullname, :string)
       add(:email, :string)
       add(:password, :string)
-      add(:roles, {:array, :string})
+      add :role, :string
       timestamps()
     end
 

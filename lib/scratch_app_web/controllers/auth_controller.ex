@@ -4,13 +4,17 @@ defmodule ScratchAppWeb.AuthController do
   alias ScratchApp.Accounts.User
   alias ScratchAppWeb.ChangesetJSON
 
+
+   @access_token_time  20
+   @refresh_token_time  20
+
   def login(conn, login_params) do
     %{"email" => email, "password" => password} = login_params
 
     with {:ok, %User{} = user} <- Accounts.user_auth(%{email: email, password: password}),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {3, :minute}) do
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {@access_token_time, :minute}) do
       {:ok, refresh_token, _} =
-        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {2, :minute})
+        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {@refresh_token_time, :minute})
 
       conn
       |> put_status(:accepted)
@@ -42,9 +46,9 @@ defmodule ScratchAppWeb.AuthController do
 
   def register(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {2, :minute}) do
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {@access_token_time, :minute}) do
       {:ok, refresh_token, _} =
-        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {3, :minute})
+        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {@refresh_token_time, :minute})
 
       conn
       |> put_status(:created)
@@ -101,9 +105,9 @@ defmodule ScratchAppWeb.AuthController do
 
     with {:ok, claims} <- Guardian.decode_and_verify(refresh_token, %{"typ" => "refresh"}),
          {:ok, user} <- Guardian.resource_from_claims(claims),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {2, :minute}) do
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user, %{}, ttl: {@access_token_time, :minute}) do
       {:ok, refresh_token, _} =
-        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {3, :minute})
+        Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {@refresh_token_time, :minute})
 
       conn
       |> put_status(:created)

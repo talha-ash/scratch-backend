@@ -5,12 +5,14 @@ defmodule ScratchApp.Recipes do
 
   alias ScratchApp.Recipes.{
     Recipe,
+    RecipeTag,
     CookingStep,
     RecipeImage,
     Ingredient,
-    Like,
-    Category,
-    SavedRecipe
+    RecipeLike,
+    RecipeCategory,
+    SavedRecipe,
+    Tag
   }
 
   def create_recipe(attrs \\ %{}) do
@@ -22,7 +24,7 @@ defmodule ScratchApp.Recipes do
       {:ok, recipe} ->
         recipe
         |> Repo.preload([:cooking_steps, :ingredients, :recipe_images, :user])
-        |> Recipe.associated_changeset(attrs)
+        |> Recipe.create_changeset(attrs)
         |> Repo.insert_or_update()
 
       {:error, messeage} ->
@@ -83,8 +85,8 @@ defmodule ScratchApp.Recipes do
   end
 
   def like_recipe(attrs) do
-    %Like{}
-    |> Like.changeset(attrs)
+    %RecipeLike{}
+    |> RecipeLike.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -101,8 +103,8 @@ defmodule ScratchApp.Recipes do
   end
 
   def create_category(attrs) do
-    %Category{}
-    |> Category.changeset(attrs)
+    %RecipeCategory{}
+    |> RecipeCategory.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -118,5 +120,43 @@ defmodule ScratchApp.Recipes do
         where: c.user_id == ^user_id,
         select: [:id, :title]
     )
+  end
+
+  def get_ingredients(user_id) do
+    Repo.all(
+      from i in "ingredients",
+        where: i.user_id == ^user_id,
+        select: [:id, :name, :quantity, :unit]
+    )
+  end
+
+  def get_recipe_tags() do
+    Repo.all(RecipeTag)
+  end
+
+  def get_tags() do
+    Repo.all(Tag)
+  end
+
+  def create_tag(attrs) do
+    %Tag{}
+    |> Tag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_recipe_tag(attrs) do
+    %RecipeTag{}
+    |> RecipeTag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def get_ingredients() do
+    Repo.all(Ingredient)
+  end
+
+  def create_ingredient(attrs) do
+    %Ingredient{}
+    |> Ingredient.changeset(attrs)
+    |> Repo.insert()
   end
 end

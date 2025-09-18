@@ -1,22 +1,20 @@
-defmodule ScratchApp.Recipes.Like do
+defmodule ScratchApp.Recipes.RecipeLike do
   use Ecto.Schema
-
   import Ecto.Changeset
-  alias ScratchApp.Recipes.Recipe
+  alias ScratchApp.Recipes.{Recipe}
+  alias ScratchApp.Accounts.User
 
   schema "recipe_likes" do
-    belongs_to :user, User, foreign_key: :user_id, on_replace: :delete
-    belongs_to :recipes, Recipe, foreign_key: :recipe_id, on_replace: :delete
-    timestamps()
+    belongs_to :user, User, on_replace: :delete
+    belongs_to :recipe, Recipe, on_replace: :delete
+
+    timestamps(type: :utc_datetime)
   end
 
-  @required ~w(user_id recipe_id)a
-
-  @doc false
-  def changeset(%__MODULE__{} = recipe_like, attrs \\ %{}) do
+  def changeset(recipe_like, attrs) do
     recipe_like
-    |> cast(attrs, @required)
-    |> validate_required(@required)
+    |> cast(attrs, [:user_id, :recipe_id])
+    |> validate_required([:user_id, :recipe_id])
     |> foreign_key_constraint(:recipe_id)
     |> foreign_key_constraint(:user_id)
     |> unique_constraint([:user_id, :recipe_id],

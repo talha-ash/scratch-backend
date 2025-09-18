@@ -1,48 +1,63 @@
 defmodule ScratchApp.Recipes.RecipeImage do
   use Ecto.Schema
-  use Waffle.Ecto.Schema
-
   import Ecto.Changeset
   alias ScratchApp.Recipes.Recipe
 
   schema "recipe_images" do
-    field :image, ScratchApp.MediaResourceManager.Type
-    belongs_to :recipe, Recipe, foreign_key: :recipe_id
-    timestamps()
+    field :image_url, :string
+    field :is_primary, :boolean, default: false
+    belongs_to :recipe, Recipe
+
+    timestamps(type: :utc_datetime)
   end
 
-  @required ~w(image recipe_id)a
-
-  # @allowed @required ++ @optional
-
-  @doc false
-  def changeset(%__MODULE__{} = recipe_image, attrs) do
+  def changeset(recipe_image, attrs) do
     recipe_image
-    |> cast_attachments(attrs, [:image], allow_urls: true)
-    |> validate_required(@required)
-    |> foreign_key_constraint(:recipe_id)
+    |> cast(attrs, [:image_url, :is_primary])
+    |> validate_required([:image_url])
   end
 
-  def new_changeset(%__MODULE__{} = recipe_image, attrs \\ %{}, %{recipe_id: recipe_id}) do
-    Map.put(recipe_image, :scope_id, recipe_id)
-    |> cast_attachments(attrs, [:image], allow_urls: true)
-    |> validate_required([:image])
+  def new_changeset(%__MODULE__{} = recipe_image, attrs) do
+    IO.inspect(attrs, label: "New Recipe Image")
+
+    recipe_image
+    |> cast(attrs, [:image_url, :is_primary])
+    |> validate_required([:image_url])
   end
 
-  def cast_assoc_with_recipe(changeset, attrs, recipe_id) do
+  def cast_assoc_with_recipe(changeset) do
     changeset
-    |> cast(attrs, [])
-    |> cast_assoc(:recipe_images,
-      required: true,
-      with: {__MODULE__, :new_changeset, [%{recipe_id: recipe_id}]}
-    )
+    |> cast_assoc(:recipe_images, required: true, with: &new_changeset/2)
+    |> validate_primary_image
+    |> validate_images_count
   end
 
-  def cast_assoc_with_recipe(changeset, recipe_id) do
-    changeset
-    |> cast_assoc(:recipe_images,
-      required: true,
-      with: {__MODULE__, :new_changeset, [%{recipe_id: recipe_id}]}
-    )
+  defp validate_primary_image(changeset) do
+    primary_image_length =
+      get_field(changeset, :recipe_images)
+      |> Enum.count(fn recipe_image -> recipe_image.is_primary end)
+
+    case primary_image_length do
+      0 -> add_error(changeset, :recipe_images, "Recipe must have a primary image")
+      1 -> changeset
+      _ -> add_error(changeset, :recipe_images, "Recipe must have a single primary image")
+    end
+  end
+
+  defp validate_images_count(changeset) do
+    images_length =
+      get_field(changeset, :recipe_images)
+      |> Enum.count()
+
+    cond do
+      images_length == 0 ->
+        add_error(changeset, :recipe_images, "Recipe images are required")
+
+      images_length > 10 ->
+        add_error(changeset, :recipe_images, "Recipe images must be less than 10")
+
+      images_length <= 10 ->
+        changeset
+    end
   end
 end
