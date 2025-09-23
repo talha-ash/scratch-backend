@@ -80,8 +80,9 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
   end
 
   def create_ingredient(_parent, args, %{context: %{current_user: current_user}}) do
+    IO.inspect("00000000000000000000000000000000000")
     args = Map.put(args, :user_id, current_user.id)
-
+    IO.inspect(args)
     with {:ok, %Recipes.Ingredient{} = ingredient} <-
            Recipes.create_ingredient(args) do
       {:ok, ingredient}

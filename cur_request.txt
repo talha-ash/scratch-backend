@@ -1,12 +1,12 @@
 ######Create Recipe
 curl -X POST \
---header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoIiwiZXhwIjoxNjUzNzI3NTI0LCJpYXQiOjE2NTEzMDgzMjQsImlzcyI6InNjcmF0Y2giLCJqdGkiOiIwMWM2MGFhMy1iZmZlLTQwNjgtOWMwNy1mZWZmYmEzNjkzYWUiLCJuYmYiOjE2NTEzMDgzMjMsInN1YiI6IjEiLCJ0eXAiOiJhY2Nlc3MifQ.yXPajNCPc1eCZEhCx_VPwEfvwwlmNZ-Za1q2qRPeinMb7tIl0f_pGTBEuZB6qAk8R6y9y7TaAz9uqdX8POHCZg' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoX2FwcCIsImV4cCI6MTc1ODE5OTQwNiwiaWF0IjoxNzU4MTk4MjA2LCJpc3MiOiJzY3JhdGNoX2FwcCIsImp0aSI6IjVhZjAzYWJmLThlZjEtNGJiNi1iN2IwLTBjNDg5ZGFiY2ExMSIsIm5iZiI6MTc1ODE5ODIwNSwic3ViIjoiMiIsInR5cCI6ImFjY2VzcyJ9.Ae_yr0zliqZ_C4X4iwu9CzeplJpo3fr-skhQleDdH_Q5-CR8BuksBsIB5t2aJZ1N5ZQbwIn8G91T7gOfJC7T2A' \
 -F query="mutation { createRecipe(cookingSteps: [{step: 1, description: \"oh ya\",videoTitle: \"oh ya\", video: \"wave\"}],ingredients:[{description: \"Hell Cell\", image: \"nft\"}] ,recipeImages: [{image: \"users_csv\"}], name: \"Hell in Cell\",serveTime:20, nutritionFacts: [\"hello\", \"cell\"] ) {id, name}}" \
--F users_csv=@nft.jpg \
--F metadata_json=@nft.jpg \
--F wave=@wave.png \
--F nft=@nft.jpg \
--F jump=@jump.jpeg \
+-F users_csv=@good_lead.jpeg \
+-F metadata_json=@good_lead.jpeg \
+-F wave=@good_lead.jpeg \
+-F nft=@good_lead.jpeg \
+-F jump=@good_lead.jpeg \
 localhost:4000/api/v1
 
 ######Update Recipe Ingredients
@@ -44,4 +44,12 @@ curl -X POST \
 -F wave=@wave.png \
 -F nft=@nft.jpg \
 -F jump=@jump.jpeg \
+localhost:4000/api/v1
+
+
+######Create Ingredient
+curl -X POST \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJzY3JhdGNoX2FwcCIsImV4cCI6MTc1ODc0MDc1OCwiaWF0IjoxNzU4NjIwNzU4LCJpc3MiOiJzY3JhdGNoX2FwcCIsImp0aSI6ImY5YjY4YmE1LTM2MTEtNDVjOC04ZmJmLTYwMTdmMGY1ZjhiNyIsIm5iZiI6MTc1ODYyMDc1Nywic3ViIjoiMiIsInR5cCI6ImFjY2VzcyJ9.N-4ZCydLSd5C_wWT60dF9bc8QIKMdriGKfMuEQ9tNIbAczNesoyN4Cqt4Yeh56HxhEZJaJH1DXuF-Wzux6tYAQ' \
+-F query="mutation { createIngredient(name: \"lala\", description: \"Great Great Great\", imageUrl: \"good_lead\"), {id, name}}" \
+-F good_lead=@good_lead.jpeg \
 localhost:4000/api/v1

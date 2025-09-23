@@ -5,6 +5,7 @@ defmodule ScratchAppWeb.Router do
     plug :accepts, ["json"]
   end
 
+
   scope "/api", ScratchAppWeb do
     pipe_through :api
   end
@@ -23,6 +24,7 @@ defmodule ScratchAppWeb.Router do
 
   pipeline :graphql do
     plug ScratchAppWeb.Context
+    # plug ScratchAppWeb.GqlUpload
   end
 
   scope "/api/v1" do

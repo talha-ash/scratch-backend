@@ -156,7 +156,7 @@ defmodule ScratchApp.Recipes do
 
   def create_ingredient(attrs) do
     %Ingredient{}
-    |> Ingredient.changeset(attrs)
+    |> Ingredient.new_changeset(attrs)
     |> Repo.insert()
   end
 end

@@ -24,13 +24,17 @@ defmodule ScratchAppWeb.GqlUpload do
          {:ok, %{"query" => query, "variables" => variables}} <-
            Jason.decode(body_params["operations"]) do
       uploads = get_uploads(body_params, file_mapper)
+      IO.inspect(uploads, label: "Uploads")
+      IO.inspect(variables, label: "Variable")
       mapped_variables = add_uploads_to_variables(uploads, variables)
+      IO.inspect(mapped_variables, label: "mapped_variables")
 
       Map.update!(conn, :params, fn params ->
         params
         |> Map.drop(["operations", "map" | Map.keys(file_mapper)])
         |> Map.merge(%{"query" => query, "variables" => mapped_variables})
         |> Map.merge(uploads)
+        |> IO.inspect(label: "Map Update")
       end)
     else
       # if request is not a multipart or body doesn't have an operation along
@@ -50,7 +54,7 @@ defmodule ScratchAppWeb.GqlUpload do
   end
 
   defp add_uploads_to_variables(uploads, variables) do
-    Map.new(uploads, fn {key, _} ->
+    Map.new(uploads, fn {key, _value} ->
       {key, key}
     end)
     |> Enum.into(variables)

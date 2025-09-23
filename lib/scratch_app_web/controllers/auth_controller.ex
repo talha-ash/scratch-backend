@@ -5,8 +5,8 @@ defmodule ScratchAppWeb.AuthController do
   alias ScratchAppWeb.ChangesetJSON
 
 
-   @access_token_time  20
-   @refresh_token_time  20
+   @access_token_time  2000
+   @refresh_token_time  2000
 
   def login(conn, login_params) do
     %{"email" => email, "password" => password} = login_params

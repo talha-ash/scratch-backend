@@ -34,7 +34,11 @@ defmodule ScratchApp.MediaResourceManager do
 
   # Override the storage directory:
   def storage_dir(version, {file, scope}) do
-    "uploads/recipe/#{scope.scope_id}"
+    if is_map(scope.scope_id) do
+      scope.scope_id.path
+    else
+      "uploads/recipe/#{scope.scope_id}"
+    end
   end
 
   # Provide a default URL if there hasn't been a file uploaded

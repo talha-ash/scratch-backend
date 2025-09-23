@@ -1,5 +1,7 @@
 defmodule ScratchApp.Recipes.Ingredient do
   use Ecto.Schema
+  use Waffle.Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
   alias ScratchApp.{Repo, Accounts}
@@ -8,7 +10,7 @@ defmodule ScratchApp.Recipes.Ingredient do
   schema "ingredients" do
     field :name, :string
     field :description, :string
-    field :image_url, :string
+    field :image_url, ScratchApp.MediaResourceManager.Type
     field :is_verified, :boolean, default: false
 
     belongs_to :user, Accounts.User
@@ -29,9 +31,12 @@ defmodule ScratchApp.Recipes.Ingredient do
   end
 
   def new_changeset(%__MODULE__{} = ingredient, attrs) do
+    ingredient = Map.put(ingredient, :scope_id, %{path: "uploads/ingredient/#{attrs["name"]}"})
+
     ingredient
-    |> cast(attrs, [:name, :description, :image_url, :is_verified, :user_id])
-    |> validate_required([:name, :image_url, :user_id])
+    |> cast(attrs, [:name, :description, :is_verified, :user_id])
+    |> validate_required([:name, :user_id])
+    |> cast_attachments(attrs, [:image_url])
     |> unique_constraint(:name)
   end
 
