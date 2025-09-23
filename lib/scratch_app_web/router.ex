@@ -24,7 +24,7 @@ defmodule ScratchAppWeb.Router do
 
   pipeline :graphql do
     plug ScratchAppWeb.Context
-    # plug ScratchAppWeb.GqlUpload
+    plug ScratchAppWeb.GqlUpload
   end
 
   scope "/api/v1" do
