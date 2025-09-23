@@ -93,6 +93,11 @@ defmodule ScratchAppWeb.Types.RecipeType do
     field :categories, list_of(:category) do
       resolve(&Recipe.get_categories/3)
     end
+
+    @desc "Get Ingredients"
+    field :get_ingredients, list_of(:ingredient) do
+      resolve(&Recipe.get_ingredients/3)
+    end
   end
 
   input_object :ingredient_input do
@@ -155,7 +160,7 @@ defmodule ScratchAppWeb.Types.RecipeType do
     field :description, :string
 
     field :image_url, :string do
-      resolve(&Helpers.resolve_images/3)
+      resolve(&Helpers.resolve_ingredient_images/3)
     end
   end
 
@@ -179,11 +184,12 @@ defmodule ScratchAppWeb.Types.RecipeType do
   # end
 
   object :ingredient do
+    field :id, :integer
     field :name, :string
     field :description, :string
 
     field :image_url, :string do
-      resolve(&Helpers.resolve_images/3)
+      resolve(&Helpers.resolve_ingredient_images/3)
     end
   end
 

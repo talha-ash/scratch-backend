@@ -130,6 +130,10 @@ defmodule ScratchApp.Recipes do
     )
   end
 
+  def get_ingredients() do
+    Repo.all(from(i in Ingredient))
+  end
+
   def get_recipe_tags() do
     Repo.all(RecipeTag)
   end

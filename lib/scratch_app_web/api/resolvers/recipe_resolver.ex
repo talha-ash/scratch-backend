@@ -83,6 +83,7 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
     IO.inspect("00000000000000000000000000000000000")
     args = Map.put(args, :user_id, current_user.id)
     IO.inspect(args)
+
     with {:ok, %Recipes.Ingredient{} = ingredient} <-
            Recipes.create_ingredient(args) do
       {:ok, ingredient}
@@ -132,6 +133,10 @@ defmodule ScratchAppWeb.Resolvers.Recipe do
     _args = Map.put(args, :user_id, current_user.id)
 
     {:ok, Recipes.get_categories(current_user.id)}
+  end
+
+  def get_ingredients(_parent, _args, _context) do
+    {:ok, Recipes.get_ingredients()}
   end
 
   def get_categories(_parent, _args, _context) do
